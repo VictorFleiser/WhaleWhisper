@@ -1,6 +1,6 @@
 function [soundData, soundName] = random_numbers(y, fs)
-    % Generate 8 random numbers
-    soundData = rand(1, 8);
+    % Generate 7 random numbers
+    soundData = rand(1, 7);
     
     % Generate a random string for soundName
     characters = 'abcdefghijklmnopqrstuvwxyz';

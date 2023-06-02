@@ -2,6 +2,12 @@ clear all;
 close all;
 clc;
 
+%Valeur entre 0 et 1
+seuil_amplitude = 0.1;
+
+%Booléen pour savoir si appliquer un filtre (n'est pas appliqué sur le spectrogramme la mtn
+filtreBool = false;
+
 % ouverture du fichier texte 'sounds_starts_ends.txt' pour récupérer le nom
 % du ficher audio à analyser ainsi que les débuts et fins (en secondes) des
 % sons à analyser
@@ -13,12 +19,10 @@ clc;
 % Analyse de tous les sons en utilisant la fonction passée en dernier arg
 % retourne le tableau avec les colonnes représentant chaque son analysé et 
 % les lignes chaque critère d'analyse
-[soundData, soundName, spectrogramData] = analyzeSoundIntervals(list_y, list_fs, @tableauValeurNomDefaut);
-
-end_second = 4.5;
+[soundData, soundName, spectrogramData] = analyzeSoundIntervals(list_y, list_fs, @mesureCriteres, soundSegments, seuil_amplitude, filtreBool);
 
 % création de l'interface graphique affichant la baleine trouvée, un
 % spectrogramme au choix, et le tableau des sons analysés par les critères
 
-gui("Baleine Bleue", spectrogramData, soundSegments, list_fs, soundData, soundName);
+gui("Baleine a Bosse", spectrogramData, soundSegments, list_fs, soundData, soundName);
 

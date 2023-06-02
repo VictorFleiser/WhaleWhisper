@@ -1,5 +1,5 @@
 function [soundData, soundName] = tableauValeurNomDefaut(y, fs)
-    soundData = repmat({'valeur'}, 1, 8);  % Use a cell array
+    soundData = repmat({'valeur'}, 1, 7);  % Use a cell array
 
     % Generate a random string for soundName
 %    characters = 'abcdefghijklmnopqrstuvwxyz';

@@ -48,32 +48,9 @@ function gui(whale_found, spectrogramData, soundSegments, fs, tableData, columnN
     xlabel('Time (s)');
     ylabel('Frequency (Hz)');
 
-
-%     % Display the spectrogram                   % A CHANGER
-%     subplot(2, 2, 2);
-%     spectrogramData = abs(spectrogramData);  % Ensure the spectrogram data is non-negative
-%     
-%     % Calculate the time and frequency axes
-%     time_axis = linspace(0, end_second, size(spectrogramData, 2));
-%     frequency_axis = linspace(0, fs/2, size(spectrogramData, 1));
-%     
-%     % Display the spectrogram with correct orientation and axis labels
-%     imagesc(time_axis, frequency_axis, 10*log10(spectrogramData));
-%     set(gca, 'YDir', 'normal');
-%     colormap(jet);
-%     colorbar();
-% %      % Manually add the label using a text object
-% %      colorbar_label = text(1.2, 0.5, 'Power/frequency (dB/Hz)', 'Rotation', -90, ...
-% %          'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Units', 'normalized');
-% 
-%     title('Spectrogram');
-%     xlabel('Time (s)');
-%     ylabel('Frequency (Hz)');
-    
     
     % Create row names for the table
-    rowNames = {'Son', 'Durée (sec)', 'Fréquence fondamentale (Hz)', 'Fréq minimum (Hz)', ...
-        'Fréq maximum (Hz)', 'Fréq début (Hz)', 'Fréq fin (Hz)', 'Intervalle de fréquences'};
+    rowNames = {'Durée (sec)', 'Fréq minimum (Hz)', 'Fréq maximum (Hz)', 'Fréq début (Hz)', 'Fréq fin (Hz)', 'Fréq moyenne (Hz)', 'Equart Max-Min'};
     
     % Display the table
 
@@ -94,7 +71,7 @@ function gui(whale_found, spectrogramData, soundSegments, fs, tableData, columnN
 end
 
 % Callback function to update the spectrogram based on the selected sound
-function updateSpectrogram(src, event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames)
+function updateSpectrogram(~ , event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames)
     % Get the selected row and column indices
     selectedRows = event.Indices(:, 1);
     selectedColumns = event.Indices(:, 2);
