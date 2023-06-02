@@ -13,15 +13,12 @@ clc;
 % Analyse de tous les sons en utilisant la fonction passée en dernier arg
 % retourne le tableau avec les colonnes représentant chaque son analysé et 
 % les lignes chaque critère d'analyse
-[soundData, soundName] = analyzeSoundIntervals(list_y, list_fs, @random_numbers);
+[soundData, soundName, spectrogramData] = analyzeSoundIntervals(list_y, list_fs, @tableauValeurNomDefaut);
 
-% Ici on crée juste un spectrogramme pour afficher la maintenant, cette
-% partie du code ne sera pas la dans le final
-file_name = 'BaB-SteMarie-120730_16h33.wav';
-start_second = 1.5;
-end_second = 12;
-[spectrogramData, y, fs] = Spectrogramme_function(file_name, start_second, end_second);
+end_second = 4.5;
 
 % création de l'interface graphique affichant la baleine trouvée, un
 % spectrogramme au choix, et le tableau des sons analysés par les critères
-gui("Baleine Bleue", spectrogramData, end_second, y, fs, soundData, soundName);
+
+gui("Baleine Bleue", spectrogramData, soundSegments, list_fs, soundData, soundName);
+

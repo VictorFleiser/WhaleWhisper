@@ -1,46 +1,74 @@
-function gui(whale_found, spectrogramData, end_second, y, fs, tableData, columnNames)
+function gui(whale_found, spectrogramData, soundSegments, fs, tableData, columnNames)
     
     % Teste quel baleine à aficher
     % Valeurs possibles :
     %"Baleine à Bosse", "Baleine Bleue", "Baleine Boréale", "Rorqual commun"
     if     (whale_found == "Baleine a Bosse")
         imageData = imread('Baleine_a_Bosse.jpg');
+        whaleFoundString = "Baleine a Bosse trouvée";
     elseif (whale_found == "Baleine Bleue")
         imageData = imread('Baleine_Bleue.jpg');
+        whaleFoundString = "Baleine Bleue trouvée";
     elseif (whale_found == "Baleine Boréale")
         imageData = imread('Baleine_Boreale.jpg');
+        whaleFoundString = "Baleine Boréale trouvée";
     elseif (whale_found == "Rorqual commun")
         imageData = imread('Rorqual_Commun.jpg');
+        whaleFoundString = "Rorqual commun trouvé";
     else %Baleine par default
         imageData = imread('Baleine_a_Bosse.jpg');
+        whaleFoundString = "Pas de baleine trouvée passée en paramètre de gui()";
     end
 
-    figure('Name', 'Image Analysis', 'Position', [100, 100, 800, 600]);
+    figure('Name', 'WhaleWhisper', 'Position', [100, 100, 800, 600]);
 
     % Display the image
     subplot(2, 2, 1);
     imshow(imageData);
     
-    % Display the spectrogram                   % A CHANGER
-    subplot(2, 2, 2);
-    spectrogramData = abs(spectrogramData);  % Ensure the spectrogram data is non-negative
+    % Add the title under the image
+    titleAxes = axes('Position', [0, 0.45, 0.5, 0.9]);
+    set(titleAxes, 'Visible', 'off');
+    text(0.5, 0.1, whaleFoundString, 'HorizontalAlignment', 'center', 'FontSize', 14, 'FontWeight', 'bold');
+
+    % Initialize the spectrogram axes
+    spectrogramAxes = subplot(2, 2, 2);
+    spectrogramData{1} = abs(spectrogramData{1});  % Ensure the spectrogram data is non-negative
     
     % Calculate the time and frequency axes
-    time_axis = linspace(0, end_second, size(spectrogramData, 2));
-    frequency_axis = linspace(0, fs/2, size(spectrogramData, 1));
+    time_axis = linspace(soundSegments(1, 1), soundSegments(2, 1), size(spectrogramData{1}, 2));
+    frequency_axis = linspace(0, fs{1}/2, size(spectrogramData{1}, 1));
     
-    % Display the spectrogram with correct orientation and axis labels
-    imagesc(time_axis, frequency_axis, 10*log10(spectrogramData));
+    % Display the initial spectrogram
+    imagesc(spectrogramAxes, time_axis, frequency_axis, 10*log10(spectrogramData{1}));
     set(gca, 'YDir', 'normal');
     colormap(jet);
     colorbar();
-%      % Manually add the label using a text object
-%      colorbar_label = text(1.2, 0.5, 'Power/frequency (dB/Hz)', 'Rotation', -90, ...
-%          'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Units', 'normalized');
-
     title('Spectrogram');
     xlabel('Time (s)');
     ylabel('Frequency (Hz)');
+
+
+%     % Display the spectrogram                   % A CHANGER
+%     subplot(2, 2, 2);
+%     spectrogramData = abs(spectrogramData);  % Ensure the spectrogram data is non-negative
+%     
+%     % Calculate the time and frequency axes
+%     time_axis = linspace(0, end_second, size(spectrogramData, 2));
+%     frequency_axis = linspace(0, fs/2, size(spectrogramData, 1));
+%     
+%     % Display the spectrogram with correct orientation and axis labels
+%     imagesc(time_axis, frequency_axis, 10*log10(spectrogramData));
+%     set(gca, 'YDir', 'normal');
+%     colormap(jet);
+%     colorbar();
+% %      % Manually add the label using a text object
+% %      colorbar_label = text(1.2, 0.5, 'Power/frequency (dB/Hz)', 'Rotation', -90, ...
+% %          'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Units', 'normalized');
+% 
+%     title('Spectrogram');
+%     xlabel('Time (s)');
+%     ylabel('Frequency (Hz)');
     
     
     % Create row names for the table
@@ -61,4 +89,39 @@ function gui(whale_found, spectrogramData, end_second, y, fs, tableData, columnN
     % Display the table
     dataTable = uitable('Data', tableData, 'ColumnName', columnNames, 'RowName', rowNames);
     set(dataTable, 'Units', 'normalized', 'Position', [tablePosX, tablePosY, tableWidth, tableHeight]);
+% Set the callback function for table cell selection
+    set(dataTable, 'CellSelectionCallback', @(src, event) updateSpectrogram(src, event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames));
+end
+
+% Callback function to update the spectrogram based on the selected sound
+function updateSpectrogram(src, event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames)
+    % Get the selected row and column indices
+    selectedRows = event.Indices(:, 1);
+    selectedColumns = event.Indices(:, 2);
+    
+    % Check if a single cell is selected
+    if numel(selectedRows) == 1 && numel(selectedColumns) == 1
+        % Get the spectrogram data for the selected sound
+        selectedSpectrogram = spectrogramData{selectedColumns};
+        
+        % Calculate the time and frequency axes
+        time_axis = linspace(soundSegments(1, selectedColumns), soundSegments(2, selectedColumns), size(selectedSpectrogram, 2));
+        frequency_axis = linspace(0, fs{selectedColumns}/2, size(selectedSpectrogram, 1));
+        
+        % Take the magnitude of the spectrogram data
+        magnitudeSpectrogram = abs(selectedSpectrogram);
+
+         % Update the spectrogram display
+        imagesc(spectrogramAxes, time_axis, frequency_axis, 10*log10(magnitudeSpectrogram));
+        set(gca, 'YDir', 'normal');
+        colormap(jet);
+        colorbar();
+
+        % Update the title
+        selectedSound = columnNames{selectedColumns};
+        title(['Spectrogram: ' selectedSound]);
+
+        xlabel('Time (s)');
+        ylabel('Frequency (Hz)');
+    end
 end

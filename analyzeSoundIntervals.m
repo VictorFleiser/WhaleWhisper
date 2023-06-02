@@ -1,7 +1,8 @@
-function [result, sound_names] = analyzeSoundIntervals(list_y, list_fs, analysisFunction)
+function [result, sound_names, spectrogramData] = analyzeSoundIntervals(list_y, list_fs, analysisFunction)
     % Initialize the result as an empty matrix
     result = [];
     sound_names = {};
+    spectrogramData = {};
     
    % Iterate over each sound segment
     for i = 1:numel(list_y)
@@ -20,5 +21,9 @@ function [result, sound_names] = analyzeSoundIntervals(list_y, list_fs, analysis
 
         % Append the soundName to the sound_names list
         sound_names{end+1} = soundName;
+
+        % Spectrogramme
+        [spectrogramme, ~, ~, ~] = spectrogram(y, hann(1024), 512, 1024, fs, 'yaxis');
+        spectrogramData{end+1} = spectrogramme;
     end
 end
