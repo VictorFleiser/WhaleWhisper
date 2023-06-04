@@ -24,6 +24,10 @@ function [result, sound_names, spectrogramData] = analyzeSoundIntervals(list_y, 
         % Append the soundName to the sound_names list
         sound_names{end+1} = soundName;
 
+        if filtreBool
+            y = filtre(y, fs);
+        end
+
         % Spectrogramme
         [spectrogramme, ~, ~, ~] = spectrogram(y, hann(1024), 512, 1024, fs, 'yaxis');
         spectrogramData{end+1} = spectrogramme;

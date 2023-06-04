@@ -1,8 +1,8 @@
 function gui(whale_found, spectrogramData, soundSegments, fs, tableData, columnNames)
-    
+
     % Teste quel baleine à aficher
     % Valeurs possibles :
-    %"Baleine à Bosse", "Baleine Bleue", "Baleine Boréale", "Rorqual commun"
+    %"Baleine a Bosse", "Baleine Bleue", "Baleine Boréale", "Rorqual commun"
     if     (whale_found == "Baleine a Bosse")
         imageData = imread('Baleine_a_Bosse.jpg');
         whaleFoundString = "Baleine a Bosse trouvée";
