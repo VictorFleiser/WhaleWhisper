@@ -5,13 +5,13 @@ clc;
 %Valeur entre 0 et 1
 seuil_amplitude = 0.9;
 
-% Booléen pour savoir si appliquer un filtre (n'est pas appliqué sur le spectrogramme la mtn
+% Booléen pour savoir si appliquer un filtre
 filtreBool = false;
 
 %% ouverture du fichier texte 'sounds_starts_ends.txt' pour récupérer le nom
 % du ficher audio à analyser ainsi que les débuts et fins (en secondes) des
 % sons à analyser
-[audioFileName, soundSegments] = get_start_end_intervals('sounds_starts_ends.txt');
+[audioFileName, soundSegments] = get_start_end_intervals('sounds_starts_ends_baleine_a_bosse.txt');
 
 %% Recupère tous les sons coupés ainsi que la fréquence d'échantillonage
 [list_y, list_fs] = readAudioSection(audioFileName, soundSegments);
@@ -67,5 +67,5 @@ species = determineSpecies(meanCategories, speciesData, weights, speciesNames);
 
 %% création de l'interface graphique affichant la baleine trouvée, un
 % spectrogramme au choix, et le tableau des sons analysés par les critères
-gui(species, spectrogramData, soundSegments, list_fs, soundData, soundName);
+gui(species, spectrogramData, soundSegments, list_fs, soundData, soundName, list_y);
 

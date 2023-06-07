@@ -1,9 +1,4 @@
 function [retour] = findMinMaxDebFinMoy(segment, fs, seuil_amplitude, filtreBool)
-% Fréquence fondamentale
-
-% Charger l'enregistrement audio
-%[audio, fs] = audioread('Bbleu.wav');
-%audio = audio(:, 1); % Sélectionner une seule piste audio si l'enregistrement en contient plusieurs
 
 % Paramètres
 fenetre_temporelle = 0.03; % Taille de la fenêtre temporelle en secondes

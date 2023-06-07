@@ -10,8 +10,4 @@ function [filteredSegment] = filtre(signal, fs)
 
     % Filtrage du segment audio
     filteredSegment = filter(b, a, segment);
-
-    % Création d'un signal filtré avec le segment sélectionné
-%    filteredSignal = zeros(size(signal));
- %   filteredSignal(startSample:endSample) = filteredSegment;
 end

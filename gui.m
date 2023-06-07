@@ -1,4 +1,4 @@
-function gui(whale_found, spectrogramData, soundSegments, fs, tableData, columnNames)
+function gui(whale_found, spectrogramData, soundSegments, fs, tableData, columnNames, list_y)
 
     % Teste quel baleine à aficher
     % Valeurs possibles :
@@ -67,11 +67,11 @@ function gui(whale_found, spectrogramData, soundSegments, fs, tableData, columnN
     dataTable = uitable('Data', tableData, 'ColumnName', columnNames, 'RowName', rowNames);
     set(dataTable, 'Units', 'normalized', 'Position', [tablePosX, tablePosY, tableWidth, tableHeight]);
 % Set the callback function for table cell selection
-    set(dataTable, 'CellSelectionCallback', @(src, event) updateSpectrogram(src, event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames));
+    set(dataTable, 'CellSelectionCallback', @(src, event) updateSpectrogram(src, event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames, list_y));
 end
 
 % Callback function to update the spectrogram based on the selected sound
-function updateSpectrogram(~ , event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames)
+function updateSpectrogram(~ , event, spectrogramAxes, spectrogramData, soundSegments, fs, columnNames, list_y)
     % Get the selected row and column indices
     selectedRows = event.Indices(:, 1);
     selectedColumns = event.Indices(:, 2);
@@ -100,5 +100,11 @@ function updateSpectrogram(~ , event, spectrogramAxes, spectrogramData, soundSeg
 
         xlabel('Time (s)');
         ylabel('Frequency (Hz)');
+
+        % Get the corresponding sound segment
+        selectedSoundSegment = list_y{selectedColumns};
+            
+        % Play the sound segment
+        soundsc(selectedSoundSegment, fs{selectedColumns});
     end
 end
